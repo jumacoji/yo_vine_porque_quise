@@ -107,7 +107,7 @@ bool cinecito::login_admin(){ //Es igual que la funcion de login_usuario solo qu
 }
 
 void cinecito::ingresar_productos(){
-
+    cout<<"Hola mundooo"<<endl;
 }
 
 

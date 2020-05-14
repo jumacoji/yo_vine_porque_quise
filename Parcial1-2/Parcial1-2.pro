@@ -8,4 +8,5 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
-    cine.h
+    cine.h \
+    plantilla.h

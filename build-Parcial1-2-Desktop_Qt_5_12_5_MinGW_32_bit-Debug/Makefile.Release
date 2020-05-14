@@ -52,7 +52,8 @@ SOURCES       = ..\Parcial1-2\cine.cpp \
 OBJECTS       = release/cine.o \
 		release/main.o
 
-DIST          =  cine.h ..\Parcial1-2\cine.cpp \
+DIST          =  cine.h \
+		plantilla.h ..\Parcial1-2\cine.cpp \
 		..\Parcial1-2\main.cpp
 QMAKE_TARGET  = Parcial1-2
 DESTDIR        = release\ #avoid trailing-slash linebreak
@@ -101,10 +102,12 @@ compiler_clean:
 
 ####### Compile
 
-release/cine.o: ../Parcial1-2/cine.cpp ../Parcial1-2/cine.h
+release/cine.o: ../Parcial1-2/cine.cpp ../Parcial1-2/cine.h \
+		../Parcial1-2/plantilla.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\cine.o ..\Parcial1-2\cine.cpp
 
-release/main.o: ../Parcial1-2/main.cpp ../Parcial1-2/cine.h
+release/main.o: ../Parcial1-2/main.cpp ../Parcial1-2/cine.h \
+		../Parcial1-2/plantilla.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\main.o ..\Parcial1-2\main.cpp
 
 ####### Install

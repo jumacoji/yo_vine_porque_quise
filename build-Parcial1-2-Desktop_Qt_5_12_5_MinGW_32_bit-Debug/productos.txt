@@ -1,4 +1,5 @@
-vasos plasticos 9 unidades (7) $84000
-paquete de pan perro 6 unidades (7) $18550
-salchicha perro 20 unidades (3) $37500
-paquete de carne 4 unidades (4) $46200
+vasos plasticos (69) $500
+pan perro (7) $1500
+salchichas (3) $2000
+carne de hamburguesa (4) $3000
+presa de pollo (6) $1600

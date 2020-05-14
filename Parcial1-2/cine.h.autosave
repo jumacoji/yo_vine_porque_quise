@@ -30,6 +30,7 @@ class cinecito{
     void escribir_txt(string texto, string txt);
     void cargar_combo(string txt);
     void mostrar_combo();
+    void seleccionar_combo();
 
 
 

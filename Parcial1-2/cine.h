@@ -22,7 +22,6 @@ class cinecito{
     bool login_usuario();
     bool login_admin();
     void agregar_users(string txt);
-
     void mostrar_inventary();
     void ingresar_productos(string txt);
     void cargar_inventario(string inventario);
@@ -30,6 +29,12 @@ class cinecito{
     void escribir_txt(string texto, string txt);
     void cargar_combo(string txt);
     void mostrar_combo();
+    void seleccionar_combo(string txt,string dia);
+    void pagar(int precio);
+    void reescribir_inventario(string txt);
+    void elegir_silla();
+    void reportes_ventas(string dia,string nombre,string venta);
+    void leer_reportes();
 
 
 

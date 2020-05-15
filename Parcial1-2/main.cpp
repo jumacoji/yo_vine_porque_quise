@@ -10,19 +10,24 @@ int main()
       string admin="sudo.txt";
       string invent="productos.txt";
       string combo="combos.txt";
+      string dia;
 
+      cout<<endl<<endl;
+      cout<<"-------------------------CineJuan-------------------------------------------"<<endl;
+      cout<<"Ingresar dia en formato dia/mes/anio: ";cin>>dia;
       cout<<"Ingresar como usuario presiona 1\nIngresar como administrador presiona 0\n";cin>>decision;
 
       if(decision){
           user.cargar_map_user(usuario);
           if(user.login_usuario()==true){
               cout<<endl;
-              cout<<"BIENVENIDO!!!! "<<endl<<endl;
+              cout<<"BIENVENIDO!!!! "<<endl<<endl;     //Main de los usuarios
               //cout<<"AQUI ESTAN LOS COMBOS"<<endl;
+              user.cargar_inventario(invent);
               user.cargar_combo(combo);
               user.mostrar_combo();
-
-
+              user.seleccionar_combo(invent,dia);
+              user.elegir_silla();
 
           }
       }
@@ -34,7 +39,7 @@ int main()
 
                 do{
                   cout<<endl<<endl;
-                  cout<<"Que desea hacer administrador?"<<endl<<endl;
+                  cout<<"Que desea hacer administrador?"<<endl<<endl;    //Main del admin
                   cout<<"A-Agregar usuarios de cine"<<endl;
                   cout<<"B-Ver inventario"<<endl;
                   cout<<"C-Agregar productos al inventario"<<endl;
@@ -62,11 +67,11 @@ int main()
                       administrador.crear_combos(combo);
                   }
                   if (eleccion==69 or eleccion==101){ //Opcion E
-
+                      administrador.leer_reportes();
 
                   }
-                  if (eleccion==70 or eleccion==102) exit=false;
-                  if (eleccion==71 or eleccion==103) {
+                  if (eleccion==70 or eleccion==102) exit=false;//Opcion F
+                  if (eleccion==71 or eleccion==103) {  //Opcion G
                       salir=false;
                       exit=false;
                   }

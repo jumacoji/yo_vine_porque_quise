@@ -1,5 +1,6 @@
-vasos plasticos (69) $500
-pan perro (7) $1500
-salchichas (3) $2000
-carne de hamburguesa (4) $3000
-presa de pollo (6) $1600
+vasos plasticos (60) $500
+pan perro (19) $1500
+salchichas (24) $2000
+carne de hamburguesa (29) $3000
+presa de pollo (60) $1600
+Gaseosa 350ml (92) $2500

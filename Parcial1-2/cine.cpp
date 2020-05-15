@@ -206,26 +206,25 @@ void cinecito::ingresar_productos(string txt){ //Funcion para ingresar productos
                inventario=Big->second;
                cout<<"Ingrese la cantidad del producto: ";
                cin>>cantidadX;                                  //Luego pedirÃ¡ la cantidad de ese producto que quiera anexar
-               for(r21=inventario.begin();r21!=inventario.end();r21++){
+               r21=inventario.begin();
                     cantidadY=r21->second[0];
                     //cashY=r21->second[1];
                     //cashY/=cantidadY;
-
                     cantidadY+=cantidadX;
                     //cashY*=cantidadX;
                     cashX=r21->second[1];
                     //cashX+=cashY;
                     cantid_precio.push_back(cantidadY);
                     cantid_precio.push_back(cashX);
-
                     name=r21->first;
                     inventario[name]=cantid_precio;
                     Inventary[ID]=inventario;                 //Una vez se realice el proceso se agrega el map la nueva cantidad
                     inventario.clear();                       //y su respectivo precio
                     cantid_precio.clear();
+
                     cout<<endl<<"Quieres seguir agregando?\nSi no quieres continuar presiona 'f' de lo contrario presiona otra letra"<<endl;
                     cin>>exit;
-               }
+
 
            }
 
@@ -261,7 +260,8 @@ void cinecito::ingresar_productos(string txt){ //Funcion para ingresar productos
 
         }
     }while (exit!='f');
-    escribir_txt(products,txt);
+    if(!decision)escribir_txt(products,txt);
+    else reescribir_inventario(txt);
 }
 
 
@@ -271,9 +271,9 @@ void cinecito::mostrar_inventary(){ //Funcion para ver el inventario de forma or
     string product;
     string id,cantidadX,precioX;
 
-    cout<<"\nINVENTARIO"<<endl<<endl;
-    printElement("ID|",5);
-    printElement("PRODUCTOS|",50);
+    cout<<"\nINVENTARIO"<<endl<<endl;                         //Se utiliza printElement para poder
+    printElement("ID|",5);                                    //imprimir una tabla de forma ordenada
+    printElement("PRODUCTOS|",50);                            //Usando template
     printElement("CANTIDAD|",15);
     printElement("PRECIO|",20);
     cout<<endl;
@@ -282,8 +282,8 @@ void cinecito::mostrar_inventary(){ //Funcion para ver el inventario de forma or
         ID=Big->first;
         id=to_string(ID);
         inventario=Big->second;
-        for(r21=inventario.begin();r21!=inventario.end();r21++){
-            product=r21->first;
+        for(r21=inventario.begin();r21!=inventario.end();r21++){ //Simplemente es sacar cada elemento que se desa imprimir dentro
+            product=r21->first;                                  //de los contenedores e implementarlos en printElement
             cantidad=r21->second[0];
             Precio=r21->second[1];
             cantidadX=to_string(cantidad);
@@ -302,7 +302,7 @@ void cinecito::mostrar_inventary(){ //Funcion para ver el inventario de forma or
 
 
 void cinecito::escribir_txt(string texto, string txt){ //Funcion para escribir un string en un txt
-    ofstream k2(txt, ios::out | ios::binary );
+    ofstream k2(txt, ios::out | ios::binary ); //Escribo en txt el contenido del string texto
     k2 << texto;
     k2.close();
 }
@@ -345,7 +345,7 @@ void cinecito::crear_combos(string txt){ //Funcion para ingresar un combo en un 
                     combitoX.append(",");
                     combitoX.append(cantidadXx);
                     k++;                                      //Todo se ingresa dentro de la misma variable para luego escribirla
-                                                          //en el txt
+                                                             //en el txt
 
                 }
 
@@ -361,10 +361,10 @@ void cinecito::crear_combos(string txt){ //Funcion para ingresar un combo en un 
 }
 
 
-void cinecito::cargar_combo(string txt){
-    map<string,map<int,vector<int>>> Grandito;
-    map<int,vector<int>> precio_cantidad;
-    vector<int> id_cantidad;
+void cinecito::cargar_combo(string txt){         //En esta funcion usa como base los anteriores cargar_map pero esta vez utilizandola
+    map<string,map<int,vector<int>>> Grandito;   //para poder guardar los combos en una variable map y guardar
+    map<int,vector<int>> precio_cantidad;        //el ID, el nombre del combo, su precio, el ID del inventario necesario
+    vector<int> id_cantidad;                     //Y su respectiva cantidad
     string texto,QUsa,copia,name,Monney,iDD,acd;
     int dinero,lineas=1,i=0,id=1,IDD,QUSA,linea=1;
     texto=leer_txt(txt);
@@ -396,29 +396,23 @@ void cinecito::cargar_combo(string txt){
             }    
         }
         if(linea%2==0){
-            precio_cantidad[dinero]=id_cantidad;
-            Grandito[name]=precio_cantidad;
+            precio_cantidad[dinero]=id_cantidad;    //En este punto se ingresan los elementos en el map
+            Grandito[name]=precio_cantidad;         //combos
             comboS[id]=Grandito;
 
             Grandito.clear();
-            precio_cantidad.clear();
-            id_cantidad.clear();
+            precio_cantidad.clear();            //Luego se borra el resto para no tener problemas en la
+            id_cantidad.clear();                //Proxima iteración
             id++;
         }
 
         linea++;
         copia.clear();
-
-
-
     }
-
-
 }
 
-
-void cinecito::mostrar_combo(){
-    map<int,vector<int>> precio_cantidad;
+void cinecito::mostrar_combo(){      //Funcion muy similar a mostrar_inventario solo que para mostrarle el combo a los
+    map<int,vector<int>> precio_cantidad; //usuarios
     map<int,vector<int>>::iterator banano;
     map<string,map<int,vector<int>>> Grandito;
     map<string,map<int,vector<int>>>::iterator grandi;
@@ -441,8 +435,8 @@ void cinecito::mostrar_combo(){
                 money=to_string(precio);
             }
         }
-        printElement(mini_id,10);
-        printElement(name,25);
+        printElement(mini_id,10);             //Se separa cada elemento en sus respectivas variables
+        printElement(name,25);                //Para luego imprimirlas ordenadamente
         printElement(money,15);
         cout<<endl;
 
@@ -452,4 +446,260 @@ void cinecito::mostrar_combo(){
 
 }
 
+void cinecito::seleccionar_combo(string txt,string dia){ //De esta funcion se derivan muchas otras
+    map<int,vector<int>> precio_cantidad;                //ya que esta es la encargada de quitarle las cantidades necesarias
+    map<int,vector<int>>::iterator banano;               //a los productos del inventario para poder vender los combos
+    vector<int> Copia_C;
+    map<string,map<int,vector<int>>> Grandito;
+    map<string,map<int,vector<int>>>::iterator grandi;
+    bool ban=true;
+    string name,nombre;
+    int precio;
+    int ID,other_id,other_cantidad,CantidadX,Cash;
+    cout<<"Selecciona el combo que mas te gusta"<<endl;
+    while (ban){
 
+        cin>>ID;
+        manzana=comboS.find(ID);                                   //Se busca el id del combo
+        if(manzana==comboS.end()){
+            cout<<"Ingrese un numero de combo existente"<<endl;
+        }
+        else ban=false;
+    }
+    Grandito=manzana->second;
+
+    for(grandi=Grandito.begin();grandi!=Grandito.end();grandi++){           //Se empizan a separar las variables de los contenedores
+        nombre=grandi->first;
+        precio_cantidad=grandi->second;                                     //para poder accerder a los contenedores interiores
+
+        for(banano=precio_cantidad.begin();banano!=precio_cantidad.end();banano++){
+            cantid_precio=banano->second;
+            precio=banano->first;
+        }
+    }
+    for(unsigned int i=0,j=1;i<cantid_precio.size();i+=2,j+=2){
+        if(cantid_precio[i]>0 && cantid_precio[j]>0){
+            other_id=cantid_precio[i];
+            other_cantidad=cantid_precio[j];
+            Big=Inventary.find(other_id);
+            inventario=Big->second;
+            r21=inventario.begin();
+            name=r21->first;
+            CantidadX=r21->second[0];
+            if(CantidadX-other_cantidad<=0){
+                cout<<"Combo agotado, lo sentimos"<<endl;
+            }
+            else{
+                CantidadX-=other_cantidad;
+                Cash=r21->second[1];
+                Copia_C.push_back(CantidadX);
+                Copia_C.push_back(Cash);
+                inventario[name]=Copia_C;
+                Inventary[other_id]=inventario;          //Finalmente Se modifican los contenedores de inventary
+                inventario.clear();
+                Copia_C.clear();
+
+            }
+
+
+        }
+    }
+    reescribir_inventario(txt);
+    pagar(precio);
+    string Prc=to_string(precio);
+    reportes_ventas(dia,nombre,Prc);
+}
+
+void cinecito::reescribir_inventario(string txt){
+
+    int precio,cantidad,tamano_map=Inventary.size(),tam=0;            //Funcion para poder modificar las cantidades de los productos de l
+    string texto="",nombre,PrecioX,CantidadX;                         //Inventario
+    for(Big=Inventary.begin();Big!=Inventary.end();Big++){
+        inventario=Big->second;
+        for(r21=inventario.begin();r21!=inventario.end();r21++){
+            nombre=r21->first;
+            cantidad=r21->second[0];
+            precio=r21->second[1];
+            PrecioX=to_string(precio);                             //Consta de utilizar el string texto para sobreescribir la informacion
+            CantidadX=to_string(cantidad);                        //del inventario
+            texto.append(nombre);
+            texto.append(" (");
+            texto.append(CantidadX);
+            texto.append(") $");
+            texto.append(PrecioX);
+            tam++;
+            if(tam!=tamano_map){
+                texto.append("\n");
+            }
+
+
+
+        }
+    }
+    escribir_txt(texto,txt);
+}
+
+
+void cinecito::pagar(int precio){              //Funcion utilizada en la practica 2, es simple y funciona como una maquina dispensadora
+    bool decision,ban=true,ban2=true;
+    int dinero,copia;
+    vector<int>Mon={50000,20000,10000,5000,2000,1000,500,200,100,50};
+    short CinM=0,VentM=0,DieM=0,cinm=0,dosm=0,mil=0,qui=0,dos=0,cien=0,cinq=0;
+    cout<<"Seleccionar metodo de pago\nPara efectivo presione 1, para tarjeta presione 0\n";
+    cin>>decision;
+    if(decision){
+        while (ban){
+            cout<<"Por favor ingrese su dinero para efectuar la compra"<<endl;
+            cin>>dinero;
+            if(dinero<precio){
+                cout<<"Dinero insuficiente"<<endl;
+            }
+            else{
+                copia=dinero;
+                dinero-=precio;
+                copia-=precio;
+                while(ban2){                         //Consta de ir haciendo comparaciones
+
+                    if(dinero>=Mon[0]){
+                        dinero-=Mon[0];
+                        CinM++;
+                    }
+                    if(dinero>=Mon[1]){
+                        dinero-=Mon[1];
+                        VentM++;
+                    }
+                    if(dinero>=Mon[2]){
+                        dinero-=Mon[2];
+                        DieM++;
+                    }
+                    if(dinero>=Mon[3]){
+                        dinero-=Mon[3];
+                        cinm++;
+                    }
+                    if(dinero>=Mon[4]){
+                        dinero-=Mon[4];
+                        dosm++;
+                    }
+                    if(dinero>=Mon[5]){
+                        dinero-=Mon[5];
+                        mil++;
+                    }
+                    if(dinero>=Mon[6]){
+                        dinero-=Mon[6];
+                        qui++;
+                    }
+                    if(dinero>=Mon[7]){
+                        dinero-=Mon[7];
+                        dos++;
+                    }
+                    if(dinero>=Mon[8]){
+                        dinero-=Mon[8];
+                        cien++;
+                    }
+                    if(dinero>=Mon[9]){
+                        dinero-=Mon[9];
+                        cinq++;
+                    }
+                    if(dinero==0) ban2=false;
+                }
+                cout<<"La maquina te devuelve"<<endl;
+                cout<<Mon[0]<<" :"<<CinM<<endl;
+                cout<<Mon[1]<<" :"<<VentM<<endl;
+                cout<<Mon[2]<<" :"<<DieM<<endl;
+                cout<<Mon[3]<<" :"<<cinm<<endl;
+                cout<<Mon[4]<<" :"<<dosm<<endl;
+                cout<<Mon[5]<<" :"<<mil<<endl;
+                cout<<Mon[6]<<" :"<<qui<<endl;
+                cout<<Mon[7]<<" :"<<dos<<endl;
+                cout<<Mon[8]<<" :"<<cien<<endl;
+                cout<<Mon[9]<<" :"<<cinq<<endl;
+                cout<<"Sobrante: "<<dinero<<endl<<endl;
+                cout<<"Tu devuelta total es: "<<copia<<endl<<endl;
+                ban=false;
+            }
+        }
+       //Al final se imprimen la devuelta con su respectivo billete (En caso de que haya pagado medio efectivo)
+
+    }
+    else{
+        cout<<"Gracias, su compra ha sido un exito"<<endl;
+    }
+
+
+}
+
+void cinecito::elegir_silla(){                                      //Funcion para pedirle al usuario en que silla se le debe
+    cout<<endl<<endl;                                               //enviar el combo
+    cout<<"Elige el puesto al cual mandaras el combo"<<endl;
+    int matriz[15][20],filas=15,columnas=10,ReservaF,ReservaC;      //Esta funcion fue utilizada de mi codigo de la practica 2
+    char filA=65,reser_quit,FILIN;
+    bool ban=true;
+
+    cout<<" |1|2|3|4|5|6|7|8|9|10|"<<endl;
+    //Agregar ceros a la matriz
+    for (int i=0;i<filas;i++){
+        for(int j=0;j<columnas;j++){
+            matriz[i][j]=0;
+        }
+    }
+    for(int k=0;k<2;k++){
+        filA=65;
+        for (int i=0;i<filas;i++){
+            cout<<filA;
+            cout<<"|";
+            filA++;
+
+            for (int j=0;j<columnas;j++){                      //Consta en llenar una matriz de ceros y hacer su estuctura para
+                if (matriz[i][j]==0){                         //Simular los puestos de un cine
+                cout<<"-";}
+                else {cout<<"+";}
+                cout<<"|";
+            }
+            cout<<endl;
+
+
+        }
+        if(k<1){
+            while (ban) {
+                reser_quit='+';
+                bool ban2=true;
+                if(reser_quit=='+'){
+                    while(ban2){
+                        cout<<"Digita fila y numero de asiento a para enviar: ";
+                        cin>>FILIN>>ReservaC;
+                        cout<<"Estas seguro de que es tu asiento?\nPresiona 0 para confirmar, 1 para corregir: ";cin>>ban2;
+                    }
+                    ReservaF=int(FILIN-64);
+                    if(matriz[ReservaF-1][ReservaC-1]!=0){
+                        cout<<"Asiento ya reservado"<<endl;
+                    }
+                    else
+                        matriz[ReservaF-1][ReservaC-1]=1;
+                    ban=false;
+                }
+                }
+            }
+
+        }
+    cout<<"Tu combo sera enviado a dicho puesto"<<endl;
+}
+
+void cinecito::reportes_ventas(string dia,string nombre,string venta){ //Funcion para guardar las ventas en un txt
+    string txt="reportes.txt";
+    string texto;
+    texto=leer_txt(txt);
+    texto.append(dia);
+    texto.append(" ");
+    texto.append(nombre);
+    texto.append(" $");
+    texto.append(venta);
+    texto.append("\n");
+    escribir_txt(texto,txt); //Se almacena en texto
+}
+
+void cinecito::leer_reportes(){        //Funcion para imprimir los reportes
+    cout<<"REPORTES DE VENTA"<<endl;   //muy basica
+    string txt="reportes.txt";
+    string Text=leer_txt(txt);
+    cout<<Text<<endl;
+}
